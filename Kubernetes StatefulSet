@@ -1,0 +1,38 @@
+apiVersion: V1
+Kind: StatefulSet
+metadata:
+  name: nginx-app
+  label:
+    -name:nginx-sts
+spec: 
+  -container:
+     -images: nginx-image:latest
+     -resouceUtilization:
+        -limit: 8GiB
+        -Quota:12GiB
+
+
+apiVersion: V1
+Kind: PersisitenVolumeClaim
+metadata:
+   -name: nginx-pvc
+   -Selcetor: 
+    -name:nginx-sts
+spec:
+  pv: pv1
+  UtilizationQuota:
+    -requests: 5Gib
+    -limit: 10Gib
+
+
+
+apiVersion: V1
+Kind: Service
+metadata:
+   -name: nginx-service
+   -Selcetor: 
+    -name:nginx-sts
+spec:
+  type: ClusterIp
+
+
