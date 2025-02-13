@@ -1,0 +1,4 @@
+Problem: Search a particular text in all files under a directory, replace it with the new value. Consider that text as an DB name or server name.
+
+Solution:
+grep "old-text" /appdata01 | awk sed -i "old-text" "new-text"
