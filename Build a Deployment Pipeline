@@ -1,0 +1,38 @@
+##CI/CD in Azure DevOps
+
+trigger 
+  -main
+
+agent: ubuntu-latest
+
+Variables: 
+  -variable-group
+
+Stages:
+  -Stage: Build
+    -Jobs:
+      -Job: git branch checkout
+        -Scripts:
+          -script: git checkout -b branch1
+      -job: Image Build
+        -Scripts:
+          -script: docker build -t image-name path/Dockerfile
+
+  -Stage: Test
+    -Jobs:
+      -Job: Image Scanning
+        -Scripts:
+          -script: trivy image-name
+      -job: output result
+        -Scripts:
+          -script: output{Image Scanning}
+
+  -Stage: Push to Kubernetes
+    -Jobs:
+      -Job: Publish to ACR registery
+        -Scripts:
+          -script: az cli push image-name acr.io --spn "spn-name" --client-id "{vg-group}"
+      -job: print output
+        -Scripts:
+          -script: echo {Publish to ACR registery}
+
